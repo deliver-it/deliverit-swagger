@@ -46,34 +46,80 @@ paths:
               $ref: "#/definitions/atendimento"
     post:
       description: |
-        Retorna uma lista de objetos `Atendimento`.
+        Insere um novo atendimento.
       parameters:
         -
-          name: status
+          name: cliente_id
           in: query
-          description: Filtra o status do atendimento
+          description: ID do Cliente
+          required: false
+          type: integer
+        -
+          name: cliente_nome
+          in: query
+          description: Nome do Cliente
           required: false
           type: string
         -
-          name: size
+          name: contato
           in: query
-          description: Tamanho da lista
-          required: false
-          type: integer
-          format: int
-        -
-          name: page
-          in: query
-          description: Página da consulta
-          required: false
-          type: integer
-          format: int
-        -
-          name: order
-          in: query
-          description: Realiza ordenação da lista
+          description: Número de Contrato do Cliente
           required: false
           type: string
+        -
+          name: circuito
+          in: query
+          description: Número do Circuito contratado
+          required: false
+          type: string
+        -
+          name: contato_nome
+          in: query
+          description: Nome do contato solicitante
+          required: true
+          type: string
+        -
+          name: contato_email
+          in: query
+          description: E-mail do contato solicitante
+          required: false
+          type: string
+        -
+          name: contato_telefone
+          in: query
+          description: Telefone do contato solicitante
+          required: true
+          type: string
+        -
+          name: area
+          in: query
+          description: Área de atendimento
+          required: true
+          type: integer
+        -
+          name: tipo
+          in: query
+          description: Tipo de atendimento
+          required: true
+          type: integer
+        -
+          name: severidade
+          in: query
+          description: Severidade do atendimento
+          required: true
+          type: integer
+        -
+          name: titulo
+          in: query
+          description: Título do atendimento
+          required: true
+          type: string
+        -
+          name: receber_protocolo
+          in: query
+          description: Receber protocolo por e-mail
+          required: false
+          type: boolean
       responses:
         "201":
           description: Atendimento inserido com sucesso 
@@ -247,7 +293,9 @@ definitions:
       descricao:
         type: string
       follow_up:
-        $ref: "#/definitions/follow_up"
+        type: array
+        items:
+          $ref: "#/definitions/follow_up"
   tipo: 
     type: object
     properties:
