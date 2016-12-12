@@ -1,0 +1,295 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: API Central de Relacionamento Vogel
+
+paths:
+  /atendimentos:
+    get:
+      description: |
+        Retorna uma lista de objetos `Atendimento`.
+      parameters:
+        -
+          name: status
+          in: query
+          description: Filtra o status do atendimento
+          required: false
+          type: string
+        -
+          name: size
+          in: query
+          description: Tamanho da lista
+          required: false
+          type: integer
+          format: int
+        -
+          name: page
+          in: query
+          description: Página da consulta
+          required: false
+          type: integer
+          format: int
+        -
+          name: order
+          in: query
+          description: Realiza ordenação da lista
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Registros encontrados com sucesso 
+          schema:
+            title: ""
+            type: array
+            items:
+              $ref: "#/definitions/atendimento"
+    post:
+      description: |
+        Retorna uma lista de objetos `Atendimento`.
+      parameters:
+        -
+          name: status
+          in: query
+          description: Filtra o status do atendimento
+          required: false
+          type: string
+        -
+          name: size
+          in: query
+          description: Tamanho da lista
+          required: false
+          type: integer
+          format: int
+        -
+          name: page
+          in: query
+          description: Página da consulta
+          required: false
+          type: integer
+          format: int
+        -
+          name: order
+          in: query
+          description: Realiza ordenação da lista
+          required: false
+          type: string
+      responses:
+        "201":
+          description: Atendimento inserido com sucesso 
+          schema:
+            title: ""
+            type: array
+            items:
+              $ref: "#/definitions/atendimento"
+  /atendimentos/dashboard:
+    get:
+      description: |
+        Retorna os valores para o Dabshboard de atendimentos
+      responses:
+        "200":
+          description: Registros encontrados com sucesso 
+          schema:
+            title: "dashboard"
+            type: array
+            items:
+              $ref: "#/definitions/dashboard"
+  /atendimentos/{id}:
+    get:
+      description: |
+        Retorna as informações de um atendimento específico.
+      parameters:
+        -
+          name: id
+          in: path
+          description: ID do atendimento
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Registro encontrado com sucesso 
+          schema:
+            $ref: "#/definitions/atendimento"
+        "404":
+          description: Nenhum registro encontrado
+  /atendimentos/protocolo/{protocolo}:
+    get:
+      description: |
+        Verifica se existe atendimento para o protocolo informado. 
+      parameters:
+        -
+          name: protocolo
+          in: path
+          description: Filtra o atendimento por protocolo
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Registro encontrado com sucesso 
+          schema:
+            title: "atendimento"
+            type: object
+            properties:
+              id:
+                type: integer
+        "404":
+          description: Nenhum registro encontrado para o protocolo informado
+  /atendimentos/{id}/followUp:
+    post:
+      description: |
+        Insere um novo follow-up no atendimento
+      parameters:
+        -
+          name: id
+          in: path
+          description: ID do atendimento
+          required: true
+          type: integer
+        -
+          name: descricao
+          in: query
+          description: Descrição do follow-up
+          required: true
+          type: string
+      responses:
+        "201":
+          description: Registro inserido com sucesso 
+          schema:
+            $ref: "#/definitions/follow_up"
+  /atendimentos/{id}/assumir:
+    post:
+      description: |
+        Vincula o usuário logado com o atendimento.
+      parameters:
+        -
+          name: id
+          in: path
+          description: ID do atendimento
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Atendimento assumido com sucesso
+  /atendimentos/{id}/fechar:
+    post:
+      description: |
+        Altera o status do atendimento para fechado.
+      parameters:
+        -
+          name: id
+          in: path
+          description: ID do atendimento
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Atendimento fechado com sucesso
+  /atendimentos/{id}/atribuir:
+    post:
+      description: |
+        Atribui o atendimento a um usuário.
+      parameters:
+        -
+          name: id
+          in: path
+          description: ID do atendimento
+          required: true
+          type: integer
+        -
+          name: usuario
+          in: query
+          description: ID do usuário
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Atendimento atribuido com sucesso
+definitions:
+  atendimento:
+    type: object
+    properties:
+      id:
+        type: integer
+      protocolo:
+        type: string
+      data_abertura:
+        type: string
+      tempo:
+        type: string
+      vencimento:
+        type: string
+      area:
+        $ref: "#/definitions/area"
+      tipo:
+        $ref: "#/definitions/tipo"
+      cliente:
+        $ref: "#/definitions/cliente"
+      contrato:
+        type: string
+      circuito:
+        type: string
+      ba:
+        type: string
+      contato:
+        type: string
+      email: 
+        type: string
+      telefone:
+        type: string
+      status:
+        type: string
+      severidade:
+        type: string
+      analista:
+        type: string
+      titulo:
+        type: string
+      descricao:
+        type: string
+      follow_up:
+        $ref: "#/definitions/follow_up"
+  tipo: 
+    type: object
+    properties:
+      id:
+        type: integer
+      nome: 
+        type: string
+  area: 
+    type: object
+    properties:
+      id:
+        type: integer
+      nome: 
+        type: string
+  cliente:
+    type: object
+    properties:
+      cid: 
+        type: integer
+      nome:
+        type: string
+  follow_up:
+    type: object
+    properties:
+      id: 
+        type: integer
+      analista:
+        type: string
+      setor:
+        type: string
+      descricao:
+        type: string
+      data:
+        type: string
+  dashboard:
+    type: object
+    properties:
+      descricao:
+        type: string
+      total:
+        type: integer
+      icone:
+        type: string
+      estilo:
+        type: string
